@@ -18,8 +18,9 @@ class Products extends StatelessWidget {
         'model': '2024',
         'price': 455000.00,
         'lease_rate': 250.00,
-        'description': 'Luxury flagship sedan with ultimate comfort and elegance',
-        'image': 'images/car1.jpg'
+        'description':
+            'Luxury flagship sedan with ultimate comfort and elegance',
+        'image': 'assets/images/car1.jpeg'
       },
       {
         'id': 2,
@@ -29,7 +30,7 @@ class Products extends StatelessWidget {
         'price': 225000.00,
         'lease_rate': 150.00,
         'description': 'Grand touring coupe with exceptional performance',
-        'image': 'images/car2.jpg'
+        'image': 'assets/images/car2.jpeg'
       },
       {
         'id': 3,
@@ -39,7 +40,38 @@ class Products extends StatelessWidget {
         'price': 325000.00,
         'lease_rate': 200.00,
         'description': 'Supercar with breathtaking performance and design',
-        'image': 'images/car3.jpg'
+        'image': 'assets/images/car3.jpg'
+      },
+      {
+        'id': 4,
+        'name': 'Ferrari SF90 Stradale',
+        'brand': 'Ferrari',
+        'model': '2024',
+        'price': 625000.00,
+        'lease_rate': 300.00,
+        'description':
+            'Hybrid supercar with revolutionary performance technology',
+        'image': 'assets/images/car4.jpg'
+      },
+      {
+        'id': 5,
+        'name': 'Aston Martin DBS',
+        'brand': 'Aston Martin',
+        'model': '2024',
+        'price': 385000.00,
+        'lease_rate': 220.00,
+        'description': 'Legendary grand tourer with British excellence',
+        'image': 'assets/images/car5.jpeg'
+      },
+      {
+        'id': 6,
+        'name': 'McLaren 720S',
+        'brand': 'McLaren',
+        'model': '2024',
+        'price': 299000.00,
+        'lease_rate': 180.00,
+        'description': 'Track-focused supercar with cutting-edge aerodynamics',
+        'image': 'assets/images/car6.jpeg'
       },
     ];
 
@@ -92,10 +124,12 @@ class Products extends StatelessWidget {
             elevation: 4,
             margin: const EdgeInsets.only(bottom: 16),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(8)),
                   child: Image.asset(
                     cars[index]['image']!,
                     width: double.infinity,
@@ -106,6 +140,7 @@ class Products extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -177,7 +212,8 @@ class Products extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: mainColor,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                               ),
                               child: const Text('Buy Now'),
                             ),
@@ -186,7 +222,8 @@ class Products extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                cartController.addToCart(cars[index], 'lease', duration: 1);
+                                cartController.addToCart(cars[index], 'lease',
+                                    duration: 1);
                                 Get.snackbar(
                                   'Success',
                                   'Added to cart',
@@ -195,7 +232,8 @@ class Products extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: SecondaryColor,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                               ),
                               child: const Text('Lease Now'),
                             ),

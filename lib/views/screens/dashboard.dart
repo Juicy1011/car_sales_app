@@ -38,17 +38,17 @@ class Dashboard extends StatelessWidget {
                       children: [
                         _buildFeaturedCarCard(
                           "Rolls Royce Phantom",
-                          "images/car1.jpg",
+                          "assets/images/car1.jpeg",
                           "\$455,000",
                         ),
                         _buildFeaturedCarCard(
                           "Bentley Continental GT",
-                          "images/car2.jpg",
+                          "assets/images/car2.jpeg",
                           "\$225,000",
                         ),
                         _buildFeaturedCarCard(
                           "Lamborghini Huracan",
-                          "images/car3.jpg",
+                          "assets/images/car3.jpg",
                           "\$325,000",
                         ),
                       ],
@@ -57,7 +57,7 @@ class Dashboard extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Quick Actions Section
             Padding(
               padding: const EdgeInsets.all(16),
@@ -112,7 +112,7 @@ class Dashboard extends StatelessWidget {
 
   Widget _buildFeaturedCarCard(String name, String image, String price) {
     return Container(
-      width: 300,
+      width: 280, // Reduced from 300
       margin: const EdgeInsets.only(right: 16),
       child: Card(
         elevation: 4,
@@ -120,7 +120,8 @@ class Dashboard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(8)),
               child: Image.asset(
                 image,
                 width: double.infinity,
@@ -129,22 +130,24 @@ class Dashboard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8), // Reduced padding
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     name,
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16, // Reduced font size
                       fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4), // Reduced spacing
                   Text(
                     price,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14, // Reduced font size
                       color: mainColor,
                       fontWeight: FontWeight.bold,
                     ),
@@ -158,28 +161,36 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  Widget _buildQuickActionCard(String title, IconData icon, VoidCallback onTap) {
+  Widget _buildQuickActionCard(
+      String title, IconData icon, VoidCallback onTap) {
     return Card(
       elevation: 4,
       child: InkWell(
         onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 48,
-              color: mainColor,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.all(8), // Added padding
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min, // Added this
+            children: [
+              Icon(
+                icon,
+                size: 32, // Reduced size
+                color: mainColor,
               ),
-            ),
-          ],
+              const SizedBox(height: 4), // Reduced spacing
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 14, // Reduced font size
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ),
     );

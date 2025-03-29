@@ -12,7 +12,6 @@ class Profile extends StatelessWidget {
       'name': 'John Doe',
       'email': 'john.doe@example.com',
       'phone': '+1 234 567 8900',
-      'address': '123 Luxury Lane, Beverly Hills, CA 90210',
       'joinDate': 'March 2024',
     };
 
@@ -73,7 +72,7 @@ class Profile extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             // Profile Details
             Padding(
               padding: const EdgeInsets.all(16),
@@ -84,11 +83,9 @@ class Profile extends StatelessWidget {
                   _buildProfileCard(
                     [
                       _buildProfileItem('Phone', userData['phone']),
-                      _buildProfileItem('Address', userData['address']),
                       _buildProfileItem('Member Since', userData['joinDate']),
                     ],
                   ),
-                  
                   const SizedBox(height: 24),
                   _buildSectionTitle('Settings'),
                   _buildProfileCard(
@@ -116,7 +113,6 @@ class Profile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  
                   const SizedBox(height: 24),
                   _buildSectionTitle('Account Actions'),
                   _buildProfileCard(

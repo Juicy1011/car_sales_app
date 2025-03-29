@@ -25,7 +25,7 @@ class homescreen extends StatelessWidget {
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.category_rounded), label: "Products"),
+                  icon: Icon(Icons.directions_car), label: "Cars"),
               BottomNavigationBarItem(icon: Icon(Icons.list), label: "Orders"),
               BottomNavigationBarItem(
                   icon: Icon(Icons.person), label: "Profile"),

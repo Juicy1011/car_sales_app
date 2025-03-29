@@ -1,63 +1,57 @@
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
-  var cartItems = <Map<String, dynamic>>[].obs;
-  var totalPrice = 0.0.obs;
+  final RxList<Map<String, dynamic>> cartItems = <Map<String, dynamic>>[].obs;
 
-  void addToCart(Map<String, dynamic> car, String type, {int? duration}) {
-    // Check if car already exists in cart
-    var existingItem = cartItems.firstWhere(
-      (item) => item['id'] == car['id'] && item['type'] == type,
-      orElse: () => {},
-    );
+  void addToCart(Map<String, dynamic> car, String type, {int duration = 1}) {
+    final double leaseRate = (car['lease_rate'] ?? 0.0).toDouble();
+    final double price = (car['price'] ?? 0.0).toDouble();
 
-    if (existingItem.isEmpty) {
-      // Add new item to cart
-      cartItems.add({
-        'id': car['id'],
-        'name': car['name'],
-        'type': type,
-        'price': car[type == 'buy' ? 'price' : 'lease_rate'],
-        'image': car['image'],
-        if (type == 'lease' && duration != null) 'duration': duration,
-      });
-      calculateTotal();
-    } else {
-      // Update existing item
-      if (type == 'lease' && duration != null) {
-        existingItem['duration'] = duration;
-        calculateTotal();
-      }
-    }
+    final item = {
+      'id': car['id'],
+      'name': car['name'],
+      'image': car['image'],
+      'type': type,
+      'price': price,
+      'lease_rate': leaseRate,
+      'duration': duration,
+      'total_price': type == 'lease' ? (leaseRate * duration) : price,
+    };
+    cartItems.add(item);
   }
 
   void removeFromCart(int id) {
     cartItems.removeWhere((item) => item['id'] == id);
-    calculateTotal();
   }
 
-  void updateLeaseDuration(int id, int duration) {
-    var item = cartItems.firstWhere((item) => item['id'] == id);
-    if (item.isNotEmpty) {
-      item['duration'] = duration;
-      calculateTotal();
-    }
-  }
-
-  void calculateTotal() {
-    double total = 0;
-    for (var item in cartItems) {
-      if (item['type'] == 'buy') {
-        total += item['price'];
-      } else {
-        total += item['price'] * item['duration'];
+  void updateLeaseDuration(int itemId, int newDuration) {
+    final index = cartItems.indexWhere((item) => item['id'] == itemId);
+    if (index != -1) {
+      final item = Map<String, dynamic>.from(cartItems[index]);
+      item['duration'] = newDuration;
+      // Update the total price for this lease item
+      if (item['type'] == 'lease') {
+        final double leaseRate = (item['lease_rate'] ?? 0.0).toDouble();
+        item['total_price'] = leaseRate * newDuration;
       }
+      cartItems[index] = item;
+      cartItems.refresh();
     }
-    totalPrice.value = total;
+  }
+
+  double get totalPrice {
+    return cartItems.fold(0.0, (sum, item) {
+      if (item['type'] == 'buy') {
+        return sum + (item['price'] ?? 0.0).toDouble();
+      } else {
+        final double leaseRate = (item['lease_rate'] ?? 0.0).toDouble();
+        final int duration = item['duration'] ?? 1;
+        return sum + (leaseRate * duration);
+      }
+    });
   }
 
   void clearCart() {
     cartItems.clear();
-    totalPrice.value = 0;
   }
-} 
+}

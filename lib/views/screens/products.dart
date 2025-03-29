@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login/configs/mycolors.dart';
+import 'package:login/controllers/cart_controller.dart';
 
 class Products extends StatelessWidget {
   const Products({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final CartController cartController = Get.find<CartController>();
+
     final List<Map<String, dynamic>> cars = [
       {
+        'id': 1,
         'name': 'Rolls Royce Phantom',
         'brand': 'Rolls Royce',
         'model': '2024',
@@ -18,6 +22,7 @@ class Products extends StatelessWidget {
         'image': 'images/car1.jpg'
       },
       {
+        'id': 2,
         'name': 'Bentley Continental GT',
         'brand': 'Bentley',
         'model': '2024',
@@ -27,6 +32,7 @@ class Products extends StatelessWidget {
         'image': 'images/car2.jpg'
       },
       {
+        'id': 3,
         'name': 'Lamborghini Huracan',
         'brand': 'Lamborghini',
         'model': '2024',
@@ -42,6 +48,41 @@ class Products extends StatelessWidget {
         title: const Text('Luxury Cars'),
         backgroundColor: mainColor,
         elevation: 0,
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () => Get.toNamed('/cart'),
+              ),
+              Obx(() => cartController.cartItems.isNotEmpty
+                  ? Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 14,
+                          minHeight: 14,
+                        ),
+                        child: Text(
+                          '${cartController.cartItems.length}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink()),
+            ],
+          ),
+        ],
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -127,7 +168,12 @@ class Products extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                // Handle buy action
+                                cartController.addToCart(cars[index], 'buy');
+                                Get.snackbar(
+                                  'Success',
+                                  'Added to cart',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: mainColor,
@@ -140,7 +186,12 @@ class Products extends StatelessWidget {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                // Handle lease action
+                                cartController.addToCart(cars[index], 'lease', duration: 1);
+                                Get.snackbar(
+                                  'Success',
+                                  'Added to cart',
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: SecondaryColor,

@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login/configs/mycolors.dart';
-import 'package:login/controllers/Homescreencontroller.dart';
-import 'package:login/views/screens/dashboard.dart';
-import 'package:login/views/screens/orders.dart';
-import 'package:login/views/screens/products.dart';
-import 'package:login/views/screens/profile.dart';
+import 'package:voitureRoyale/configs/mycolors.dart';
+import 'package:voitureRoyale/controllers/Homescreencontroller.dart';
+import 'package:voitureRoyale/views/screens/dashboard.dart';
+import 'package:voitureRoyale/views/screens/orders.dart';
+import 'package:voitureRoyale/views/screens/products.dart';
+import 'package:voitureRoyale/views/screens/profile.dart';
 
 Homescreencontroller homescreencontroller = Homescreencontroller();
 List<Widget> myScreens = [Dashboard(), Products(), Orders(), Profile()];

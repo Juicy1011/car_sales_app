@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login/configs/mycolors.dart';
+import 'package:voitureRoyale/configs/mycolors.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});

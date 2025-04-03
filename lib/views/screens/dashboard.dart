@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login/configs/mycolors.dart';
+import 'package:voitureRoyale/configs/mycolors.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});

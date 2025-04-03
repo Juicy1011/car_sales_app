@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login/configs/mycolors.dart';
-import 'package:login/controllers/cart_controller.dart';
+import 'package:voitureRoyale/configs/mycolors.dart';
+import 'package:voitureRoyale/controllers/cart_controller.dart';
 
 class Products extends StatelessWidget {
   const Products({super.key});

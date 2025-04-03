@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login/configs/mycolors.dart';
+import 'package:voitureRoyale/configs/mycolors.dart';
 
 Widget myButton(VoidCallback work, {required label, color = mainColor}) {
   return MaterialButton(

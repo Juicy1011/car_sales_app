@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:login/configs/mycolors.dart';
-import 'package:login/controllers/cart_controller.dart';
+import 'package:voitureRoyale/configs/mycolors.dart';
+import 'package:voitureRoyale/controllers/cart_controller.dart';
 
 class Cart extends StatelessWidget {
   const Cart({super.key});
@@ -115,7 +115,8 @@ class Cart extends StatelessWidget {
                                     IconButton(
                                       icon: const Icon(Icons.delete_outline),
                                       onPressed: () {
-                                        cartController.removeFromCart(item['id']);
+                                        cartController
+                                            .removeFromCart(item['id']);
                                       },
                                     ),
                                   ],

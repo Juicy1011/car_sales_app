@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:voitureRoyale/configs/mycolors.dart';
 import 'package:voitureRoyale/views/widgets/mybutton.dart';
 import 'package:voitureRoyale/views/widgets/textfield.dart';
@@ -19,6 +22,43 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+
+  Future<void> registerUser() async {
+    var url = Uri.parse("http://localhost/car_sales/register.php");
+
+    try {
+      var response = await http.post(url, body: {
+        "username": userNameController.text,
+        "email": emailController.text,
+        "password": passwordController.text,
+      });
+
+      var jsonResponse = jsonDecode(response.body);
+      if (jsonResponse["success"] == 1) {
+        Get.snackbar(
+          "Success",
+          "Account created successfully!",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+        Get.toNamed("/"); // Navigate to login
+      } else {
+        Get.snackbar(
+          "Error",
+          jsonResponse["message"] ?? "Registration failed!",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+      }
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "Failed to connect to server!",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +118,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    // Password Field with Eye Toggle
                     myTextField(
                       hintText: "Enter password",
                       controller: passwordController,
@@ -105,7 +144,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    // Confirm Password Field with Eye Toggle
                     myTextField(
                       hintText: "Confirm password",
                       controller: confirmPasswordController,
@@ -134,12 +172,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                     SizedBox(height: 30),
                     myButton(() {
-                      // Input Validation
                       if (userNameController.text.isEmpty ||
                           emailController.text.isEmpty ||
                           passwordController.text.isEmpty ||
                           confirmPasswordController.text.isEmpty) {
-                        // Show error message if any field is empty
                         Get.snackbar(
                           "Error",
                           "All fields are required!",
@@ -147,7 +183,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           colorText: Colors.white,
                         );
                       } else if (!emailController.text.contains('@')) {
-                        // Show error message if email is invalid
                         Get.snackbar(
                           "Error",
                           "Please enter a valid email address!",
@@ -156,7 +191,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         );
                       } else if (passwordController.text !=
                           confirmPasswordController.text) {
-                        // Show error message if passwords don't match
                         Get.snackbar(
                           "Error",
                           "Passwords do not match!",
@@ -164,15 +198,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           colorText: Colors.white,
                         );
                       } else {
-                        // Proceed with signup logic
-                        print("Creating new account");
-                        Get.snackbar(
-                          "Success",
-                          "Account created successfully!",
-                          backgroundColor: Colors.green,
-                          colorText: Colors.white,
-                        );
-                        // Navigate to login page or home page
+                        registerUser();
                       }
                     }, label: "Create Account", color: SecondaryColor),
                     SizedBox(height: 20),

@@ -1,12 +1,16 @@
+import 'dart:convert';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:voitureRoyale/configs/mycolors.dart';
 import 'package:voitureRoyale/controllers/DisplayController.dart';
 import 'package:voitureRoyale/views/widgets/mybutton.dart';
 import 'package:voitureRoyale/views/widgets/textfield.dart';
-import 'package:voitureRoyale/views/screens/RegistrationPage.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
+// Shared storage for username (using GetStorage for persistent storage)
+var store = GetStorage();
 
 class MyWidget extends StatefulWidget {
   const MyWidget({super.key});
@@ -16,27 +20,34 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
+  // Controllers to capture input from the text fields
   final TextEditingController userNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final DisplayController displayController = DisplayController();
-  bool _isPasswordVisible = false;
+  final DisplayController displayController =
+      DisplayController(); // Display controller for error messages
+  bool _isPasswordVisible = false; // Flag to toggle password visibility
 
   @override
   Widget build(BuildContext context) {
+    String username = store.read("username") ?? "";
+    userNameController.text = username;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-          image: AssetImage("assets/images/background3.jpg"),
-          fit: BoxFit.cover,
-        )),
+          image: DecorationImage(
+            image: AssetImage("assets/images/background3.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(30, 30, 20, 5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Logo
               Image.asset(
                 "assets/images/logo1.png",
                 height: 100,
@@ -44,10 +55,12 @@ class _MyWidgetState extends State<MyWidget> {
               Text(
                 'Login',
                 style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
+              // Username Field
               myTextField(
                 hintText: "Enter username",
                 controller: userNameController,
@@ -59,9 +72,8 @@ class _MyWidgetState extends State<MyWidget> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20),
+              // Email Field
               myTextField(
                 hintText: "Enter email",
                 controller: emailController,
@@ -73,9 +85,8 @@ class _MyWidgetState extends State<MyWidget> {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20),
+              // Password Field
               myTextField(
                 hintText: "Enter password",
                 controller: passwordController,
@@ -102,43 +113,107 @@ class _MyWidgetState extends State<MyWidget> {
                 ),
               ),
               SizedBox(height: 30),
-              myButton(() {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Successfully logged in!'),
-                    backgroundColor: SecondaryColor,
-                    duration: Duration(seconds: 2),
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+              // Login Button
+              myButton(() async {
+                String username = userNameController.text.trim();
+                String email = emailController.text.trim();
+                String password = passwordController.text.trim();
+
+                // Basic validation to ensure all fields are filled
+                if (username.isEmpty || email.isEmpty || password.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Please fill all fields.'),
+                      backgroundColor: Colors.red,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  return;
+                }
+
+                try {
+                  // Set the URL for your login endpoint (change localhost to actual server when deployed)
+                  var url = Uri.parse(
+                      "http://localhost/car_sales/login.php?username=$username&password=$password&email=$email");
+
+                  // Send the HTTP request to the server
+                  var response = await http.get(url);
+                  print("Server response: ${response.body}");
+
+                  if (response.statusCode == 200) {
+                    // Parse the response JSON
+                    var data = response.body;
+                    var jsonResponse = jsonDecode(data);
+
+                    if (jsonResponse['success'] == 1) {
+                      // If login is successful, save the username and navigate to the home screen
+                      store.write("username", username);
+                      Get.toNamed("/homescreen");
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Successfully logged in!'),
+                          backgroundColor: SecondaryColor,
+                          duration: Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    } else {
+                      // If login fails (user not found), show error message
+                      displayController.errorMessage.value =
+                          "Login failed. Please check your credentials.";
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                              Text('Invalid credentials. Please try again.'),
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  } else {
+                    // Handle any unexpected errors (non-200 status code)
+                    displayController.errorMessage.value =
+                        "Error: ${response.statusCode}";
+                  }
+                } catch (e) {
+                  // Handle error in case of network or server issues
+                  displayController.errorMessage.value =
+                      "Error: ${e.toString()}";
+                }
               }, label: "Login", color: SecondaryColor),
+
               SizedBox(height: 30),
+              // Redirect to registration screen if user doesn't have an account
               myButton(() {
                 Get.toNamed("/Registration");
               }, label: "SignUp", color: Colors.deepOrange),
+              // Forgot password option
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   GestureDetector(
-                      child: Text(
-                        "Forgot Password",
-                        style: TextStyle(
-                            color: mainColor,
-                            decoration: TextDecoration.underline),
+                    child: Text(
+                      "Forgot Password",
+                      style: TextStyle(
+                        color: mainColor,
+                        decoration: TextDecoration.underline,
                       ),
-                      onTap: () {
-                        print("password recovered");
-                      }),
+                    ),
+                    onTap: () {
+                      print("password recovery flow initiated");
+                    },
+                  ),
                 ],
               ),
+              // Display error message from the controller
               Obx(() => Text(
-                    displayController
-                        .errorMessage.value, // Access the value property
+                    displayController.errorMessage.value,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                     ),
-                  ))
+                  )),
             ],
           ),
         ),
@@ -148,6 +223,7 @@ class _MyWidgetState extends State<MyWidget> {
 
   @override
   void dispose() {
+    // Dispose controllers when widget is disposed to prevent memory leaks
     userNameController.dispose();
     emailController.dispose();
     passwordController.dispose();

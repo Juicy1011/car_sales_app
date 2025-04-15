@@ -67,7 +67,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background7.jpg"),
+            image: AssetImage("assets/images/background82.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -83,7 +83,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
-                      "assets/images/logo1.png",
+                      "assets/images/logo3.png",
                       height: 100,
                     ),
                     Text(
@@ -200,7 +200,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       } else {
                         registerUser();
                       }
-                    }, label: "Create Account", color: SecondaryColor),
+                    },
+                        label: "Create Account",
+                        color: const Color.fromARGB(255, 35, 4, 49)),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

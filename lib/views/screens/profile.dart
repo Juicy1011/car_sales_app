@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:voitureRoyale/configs/mycolors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,7 +13,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  late Map<String, dynamic> userData;
+  Map<String, dynamic>? userData;
   bool isLoading = true;
   bool hasError = false;
 
@@ -23,7 +24,19 @@ class _ProfileState extends State<Profile> {
   }
 
   Future<void> _fetchUserData() async {
-    final userId = 7; // Replace with dynamic user ID if necessary
+    final store = GetStorage();
+    final userId = store.read("user_id");
+
+    if (userId == null) {
+      print("No user_id found in local storage.");
+      setState(() {
+        hasError = true;
+        isLoading = false;
+      });
+      return;
+    }
+
+    print("Fetching profile for user_id: $userId");
     final url = 'http://localhost/car_sales/profile.php?user_id=$userId';
 
     try {
@@ -49,6 +62,7 @@ class _ProfileState extends State<Profile> {
         });
       }
     } catch (e) {
+      print("Error fetching profile: $e");
       setState(() {
         hasError = true;
         isLoading = false;
@@ -94,7 +108,7 @@ class _ProfileState extends State<Profile> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              userData['username'],
+                              userData?['username'] ?? 'N/A',
                               style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -102,7 +116,7 @@ class _ProfileState extends State<Profile> {
                               ),
                             ),
                             Text(
-                              userData['email'],
+                              userData?['email'] ?? 'N/A',
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.white70,
@@ -121,8 +135,8 @@ class _ProfileState extends State<Profile> {
                             _buildSectionTitle('Account Information'),
                             _buildProfileCard(
                               [
-                                _buildProfileItem(
-                                    'Member Since', userData['created_at']),
+                                _buildProfileItem('Member Since',
+                                    userData?['created_at'] ?? 'Unknown'),
                               ],
                             ),
                             const SizedBox(height: 24),
@@ -146,8 +160,10 @@ class _ProfileState extends State<Profile> {
                                   'Logout',
                                   Icons.logout,
                                   () {
-                                    // Handle logout
-                                    Get.offAllNamed('/login');
+                                    final store = GetStorage();
+                                    store.erase(); // Clear local storage
+                                    Get.offAllNamed(
+                                        '/login'); // Redirect to login
                                   },
                                   textColor: Colors.red,
                                   iconColor: Colors.red,

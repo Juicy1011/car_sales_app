@@ -7,5 +7,6 @@ Widget myButton(VoidCallback work, {required label, color = mainColor}) {
     color: color,
     minWidth: 300,
     child: Text(label),
+    textColor: Colors.white,
   );
 }

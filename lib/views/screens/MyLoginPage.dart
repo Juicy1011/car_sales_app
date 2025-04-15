@@ -38,7 +38,7 @@ class _MyWidgetState extends State<MyWidget> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background7.jpg"),
+            image: AssetImage("assets/images/background82.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -55,7 +55,7 @@ class _MyWidgetState extends State<MyWidget> {
                   SizedBox(height: 40),
                   // Logo
                   Image.asset(
-                    "assets/images/logo1.png",
+                    "assets/images/logo3.png",
                     height: 100,
                   ),
                   SizedBox(height: 20),
@@ -124,6 +124,7 @@ class _MyWidgetState extends State<MyWidget> {
                     child: Column(
                       children: [
                         myButton(() async {
+                          //trim potential white space and BOM characters
                           String username = userNameController.text.trim();
                           String email = emailController.text.trim();
                           String password = passwordController.text.trim();
@@ -172,6 +173,8 @@ class _MyWidgetState extends State<MyWidget> {
 
                               if (jsonResponse['success'] == 1) {
                                 // If login is successful, save the username and navigate to the home screen
+                                await store.write("user_id",
+                                    jsonResponse['user_id']); // Store user_id
                                 store.write("username", username);
                                 Get.toNamed("/homescreen");
 
@@ -206,11 +209,15 @@ class _MyWidgetState extends State<MyWidget> {
                             displayController.errorMessage.value =
                                 "Error: ${e.toString()}";
                           }
-                        }, label: "Login", color: SecondaryColor),
+                        },
+                            label: "Login",
+                            color: const Color.fromARGB(255, 35, 4, 49)),
                         SizedBox(height: 20),
                         myButton(() {
                           Get.toNamed("/Registration");
-                        }, label: "SignUp", color: Colors.deepOrange),
+                        },
+                            label: "SignUp",
+                            color: const Color.fromARGB(255, 63, 18, 5)),
                       ],
                     ),
                   ),

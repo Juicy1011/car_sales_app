@@ -126,7 +126,7 @@ class Cart extends StatelessWidget {
                                   Row(
                                     children: [
                                       const Text(
-                                        "Duration:",
+                                        "Duration: ",
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
@@ -210,8 +210,9 @@ class Cart extends StatelessWidget {
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
-                            // Handle checkout
-                            Get.toNamed('/checkout');
+                            cartController
+                                .checkout(); // Save cart items and clear the cart
+                            Get.toNamed('/orders'); // Navigate to Orders page
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: mainColor,

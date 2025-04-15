@@ -1,140 +1,165 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:voitureRoyale/configs/mycolors.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Sample user data - replace with actual user data later
-    final Map<String, dynamic> userData = {
-      'name': 'John Doe',
-      'email': 'john.doe@example.com',
-      'phone': '+1 234 567 8900',
-      'joinDate': 'March 2024',
-    };
+  _ProfileState createState() => _ProfileState();
+}
 
+class _ProfileState extends State<Profile> {
+  late Map<String, dynamic> userData;
+  bool isLoading = true;
+  bool hasError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    final userId = 7; // Replace with dynamic user ID if necessary
+    final url = 'http://localhost/car_sales/profile.php?user_id=$userId';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success']) {
+          setState(() {
+            userData = data['data'];
+            isLoading = false;
+          });
+        } else {
+          setState(() {
+            hasError = true;
+            isLoading = false;
+          });
+        }
+      } else {
+        setState(() {
+          hasError = true;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        hasError = true;
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("My Profile"),
         backgroundColor: mainColor,
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              // Handle edit profile
-            },
-          ),
-        ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Profile Header
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: mainColor,
-                borderRadius: const BorderRadius.vertical(
-                  bottom: Radius.circular(30),
-                ),
-              ),
-              child: Column(
-                children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.person,
-                      size: 50,
-                      color: mainColor,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    userData['name'],
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    userData['email'],
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : hasError
+              ? const Center(child: Text('Failed to load user data'))
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      // Profile Header
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: mainColor,
+                          borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(30),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            const CircleAvatar(
+                              radius: 50,
+                              backgroundColor: Colors.white,
+                              child: Icon(
+                                Icons.person,
+                                size: 50,
+                                color: mainColor,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              userData['username'],
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              userData['email'],
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-            // Profile Details
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSectionTitle('Account Information'),
-                  _buildProfileCard(
-                    [
-                      _buildProfileItem('Phone', userData['phone']),
-                      _buildProfileItem('Member Since', userData['joinDate']),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  _buildSectionTitle('Settings'),
-                  _buildProfileCard(
-                    [
-                      _buildSettingsItem(
-                        'Change Password',
-                        Icons.lock_outline,
-                        () {
-                          // Handle change password
-                        },
-                      ),
-                      _buildSettingsItem(
-                        'Notification Settings',
-                        Icons.notifications_outlined,
-                        () {
-                          // Handle notification settings
-                        },
-                      ),
-                      _buildSettingsItem(
-                        'Privacy Settings',
-                        Icons.privacy_tip_outlined,
-                        () {
-                          // Handle privacy settings
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  _buildSectionTitle('Account Actions'),
-                  _buildProfileCard(
-                    [
-                      _buildSettingsItem(
-                        'Logout',
-                        Icons.logout,
-                        () {
-                          // Handle logout
-                          Get.offAllNamed('/login');
-                        },
-                        textColor: Colors.red,
-                        iconColor: Colors.red,
+                      // Profile Details
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionTitle('Account Information'),
+                            _buildProfileCard(
+                              [
+                                _buildProfileItem(
+                                    'Member Since', userData['created_at']),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+                            _buildSectionTitle('Settings'),
+                            _buildProfileCard(
+                              [
+                                _buildSettingsItem(
+                                  'Notification Settings',
+                                  Icons.notifications_outlined,
+                                  () {
+                                    // Handle notification settings
+                                  },
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 24),
+                            _buildSectionTitle('Account Actions'),
+                            _buildProfileCard(
+                              [
+                                _buildSettingsItem(
+                                  'Logout',
+                                  Icons.logout,
+                                  () {
+                                    // Handle logout
+                                    Get.offAllNamed('/login');
+                                  },
+                                  textColor: Colors.red,
+                                  iconColor: Colors.red,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+                ),
     );
   }
 

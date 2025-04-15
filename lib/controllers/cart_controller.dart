@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
+import 'orders_controller.dart'; // Import the OrdersController
 
 class CartController extends GetxController {
   final RxList<Map<String, dynamic>> cartItems = <Map<String, dynamic>>[].obs;
+
+  final RxList<Map<String, dynamic>> orderDetails =
+      <Map<String, dynamic>>[].obs;
 
   void addToCart(Map<String, dynamic> car, String type, {int duration = 1}) {
     final double leaseRate = (car['lease_rate'] ?? 0.0).toDouble();
@@ -53,5 +57,27 @@ class CartController extends GetxController {
 
   void clearCart() {
     cartItems.clear();
+  }
+
+  void checkout() {
+    // Get the OrdersController instance
+    final OrdersController ordersController = Get.find<OrdersController>();
+
+    // Add all items from the cart to the orders list
+    for (var item in cartItems) {
+      final order = {
+        'car': item['name'],
+        'type': item['type'],
+        'price': item['total_price'],
+        'date': DateTime.now().toIso8601String(),
+        'status': 'pending',
+      };
+
+      // Add the order to the orders controller
+      ordersController.addOrder(order);
+    }
+
+    // Clear the cart after checkout
+    clearCart();
   }
 }

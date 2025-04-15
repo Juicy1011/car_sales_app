@@ -38,183 +38,210 @@ class _MyWidgetState extends State<MyWidget> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background3.jpg"),
+            image: AssetImage("assets/images/background7.jpg"),
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 30, 20, 5),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo
-              Image.asset(
-                "assets/images/logo1.png",
-                height: 100,
-              ),
-              Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              // Username Field
-              myTextField(
-                hintText: "Enter username",
-                controller: userNameController,
-                fillColor: Colors.white,
-                textColor: Colors.white,
-                hintTextColor: Colors.white,
-                prefixIcon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 20),
-              // Email Field
-              myTextField(
-                hintText: "Enter email",
-                controller: emailController,
-                fillColor: Colors.white,
-                textColor: Colors.white,
-                hintTextColor: Colors.white,
-                prefixIcon: Icon(
-                  Icons.email_outlined,
-                  color: Colors.white,
-                ),
-              ),
-              SizedBox(height: 20),
-              // Password Field
-              myTextField(
-                hintText: "Enter password",
-                controller: passwordController,
-                fillColor: Colors.white,
-                textColor: Colors.white,
-                hintTextColor: Colors.white,
-                obscureText: !_isPasswordVisible,
-                prefixIcon: Icon(
-                  Icons.lock_outline,
-                  color: Colors.white,
-                ),
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isPasswordVisible
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isPasswordVisible = !_isPasswordVisible;
-                    });
-                  },
-                ),
-              ),
-              SizedBox(height: 30),
-              // Login Button
-              myButton(() async {
-                String username = userNameController.text.trim();
-                String email = emailController.text.trim();
-                String password = passwordController.text.trim();
-
-                // Basic validation to ensure all fields are filled
-                if (username.isEmpty || email.isEmpty || password.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Please fill all fields.'),
-                      backgroundColor: Colors.red,
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
-                  return;
-                }
-
-                try {
-                  // Set the URL for your login endpoint (change localhost to actual server when deployed)
-                  var url = Uri.parse(
-                      "http://localhost/car_sales/login.php?username=$username&password=$password&email=$email");
-
-                  // Send the HTTP request to the server
-                  var response = await http.get(url);
-                  print("Server response: ${response.body}");
-
-                  if (response.statusCode == 200) {
-                    // Parse the response JSON
-                    var data = response.body;
-                    var jsonResponse = jsonDecode(data);
-
-                    if (jsonResponse['success'] == 1) {
-                      // If login is successful, save the username and navigate to the home screen
-                      store.write("username", username);
-                      Get.toNamed("/homescreen");
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Successfully logged in!'),
-                          backgroundColor: SecondaryColor,
-                          duration: Duration(seconds: 2),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    } else {
-                      // If login fails (user not found), show error message
-                      displayController.errorMessage.value =
-                          "Login failed. Please check your credentials.";
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                              Text('Invalid credentials. Please try again.'),
-                          backgroundColor: Colors.red,
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    }
-                  } else {
-                    // Handle any unexpected errors (non-200 status code)
-                    displayController.errorMessage.value =
-                        "Error: ${response.statusCode}";
-                  }
-                } catch (e) {
-                  // Handle error in case of network or server issues
-                  displayController.errorMessage.value =
-                      "Error: ${e.toString()}";
-                }
-              }, label: "Login", color: SecondaryColor),
-
-              SizedBox(height: 30),
-              // Redirect to registration screen if user doesn't have an account
-              myButton(() {
-                Get.toNamed("/Registration");
-              }, label: "SignUp", color: Colors.deepOrange),
-              // Forgot password option
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    child: Text(
-                      "Forgot Password",
-                      style: TextStyle(
-                        color: mainColor,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    onTap: () {
-                      print("password recovery flow initiated");
-                    },
+                  SizedBox(height: 40),
+                  // Logo
+                  Image.asset(
+                    "assets/images/logo1.png",
+                    height: 100,
                   ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  // Username Field
+                  myTextField(
+                    hintText: "Enter username",
+                    controller: userNameController,
+                    fillColor: Colors.white,
+                    textColor: Colors.white,
+                    hintTextColor: Colors.white,
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Email Field
+                  myTextField(
+                    hintText: "Enter email",
+                    controller: emailController,
+                    fillColor: Colors.white,
+                    textColor: Colors.white,
+                    hintTextColor: Colors.white,
+                    prefixIcon: Icon(
+                      Icons.email_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Password Field
+                  myTextField(
+                    hintText: "Enter password",
+                    controller: passwordController,
+                    fillColor: Colors.white,
+                    textColor: Colors.white,
+                    hintTextColor: Colors.white,
+                    obscureText: !_isPasswordVisible,
+                    prefixIcon: Icon(
+                      Icons.lock_outline,
+                      color: Colors.white,
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      children: [
+                        myButton(() async {
+                          String username = userNameController.text.trim();
+                          String email = emailController.text.trim();
+                          String password = passwordController.text.trim();
+
+                          // Basic validation to ensure all fields are filled
+                          if (username.isEmpty ||
+                              email.isEmpty ||
+                              password.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please fill all fields.'),
+                                backgroundColor: Colors.red,
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                            return;
+                          }
+
+                          try {
+                            print(
+                                "http://localhost/car_sales/login.php?username=$username&password=$password&email=$email");
+                            // Set the URL for your login endpoint (change localhost to actual server when deployed)
+                            var url = Uri.parse(
+                                "http://localhost/car_sales/login.php?username=$username&password=$password&email=$email");
+
+                            // Send the HTTP request to the server
+                            var response = await http
+                                .get(url, headers: <String, String>{
+                              "Content-type": "application/json; charset=UTF-8"
+                            });
+                            print("Server response: ${response.body}");
+
+                            if (response.statusCode == 200) {
+                              // Trim the response to avoid any unexpected whitespace or characters
+                              var data = response.body.trim();
+
+                              // Parse the response JSON with error handling
+                              var jsonResponse;
+                              try {
+                                jsonResponse = jsonDecode(data);
+                              } catch (e) {
+                                displayController.errorMessage.value =
+                                    "Error parsing JSON response: ${e.toString()}";
+                                return;
+                              }
+
+                              if (jsonResponse['success'] == 1) {
+                                // If login is successful, save the username and navigate to the home screen
+                                store.write("username", username);
+                                Get.toNamed("/homescreen");
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Successfully logged in!'),
+                                    backgroundColor: SecondaryColor,
+                                    duration: Duration(seconds: 2),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              } else {
+                                // If login fails (user not found), show error message
+                                displayController.errorMessage.value =
+                                    "Login failed. Please check your credentials.";
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                        'Invalid credentials. Please try again.'),
+                                    backgroundColor: Colors.red,
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              }
+                            } else {
+                              // Handle any unexpected errors (non-200 status code)
+                              displayController.errorMessage.value =
+                                  "Error: ${response.statusCode}";
+                            }
+                          } catch (e) {
+                            // Handle error in case of network or server issues
+                            displayController.errorMessage.value =
+                                "Error: ${e.toString()}";
+                          }
+                        }, label: "Login", color: SecondaryColor),
+                        SizedBox(height: 20),
+                        myButton(() {
+                          Get.toNamed("/Registration");
+                        }, label: "SignUp", color: Colors.deepOrange),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 15),
+                    child: GestureDetector(
+                      child: Text(
+                        "Forgot Password",
+                        style: TextStyle(
+                          color: mainColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      onTap: () {
+                        print("password recovery flow initiated");
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Display error message from the controller
+                  Obx(() => Text(
+                        displayController.errorMessage.value,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      )),
                 ],
               ),
-              // Display error message from the controller
-              Obx(() => Text(
-                    displayController.errorMessage.value,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  )),
-            ],
+            ),
           ),
         ),
       ),

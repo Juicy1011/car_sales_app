@@ -12,7 +12,7 @@ class Products extends StatelessWidget {
 
     final List<Map<String, dynamic>> cars = [
       {
-        'id': 1,
+        'id': 7,
         'name': 'Rolls Royce Phantom',
         'brand': 'Rolls Royce',
         'model': '2024',
@@ -23,7 +23,7 @@ class Products extends StatelessWidget {
         'image': 'assets/images/car1.jpeg'
       },
       {
-        'id': 2,
+        'id': 8,
         'name': 'Bentley Continental GT',
         'brand': 'Bentley',
         'model': '2024',
@@ -33,7 +33,7 @@ class Products extends StatelessWidget {
         'image': 'assets/images/car2.jpeg'
       },
       {
-        'id': 3,
+        'id': 9,
         'name': 'Lamborghini Huracan',
         'brand': 'Lamborghini',
         'model': '2024',
@@ -43,7 +43,7 @@ class Products extends StatelessWidget {
         'image': 'assets/images/car3.jpg'
       },
       {
-        'id': 4,
+        'id': 10,
         'name': 'Ferrari SF90 Stradale',
         'brand': 'Ferrari',
         'model': '2024',
@@ -54,7 +54,7 @@ class Products extends StatelessWidget {
         'image': 'assets/images/car4.jpg'
       },
       {
-        'id': 5,
+        'id': 11,
         'name': 'Aston Martin DBS',
         'brand': 'Aston Martin',
         'model': '2024',
@@ -64,7 +64,7 @@ class Products extends StatelessWidget {
         'image': 'assets/images/car5.jpeg'
       },
       {
-        'id': 6,
+        'id': 12,
         'name': 'McLaren 720S',
         'brand': 'McLaren',
         'model': '2024',

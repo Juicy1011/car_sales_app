@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:voitureRoyale/configs/config.dart';
 import 'package:voitureRoyale/configs/mycolors.dart';
 import 'package:voitureRoyale/controllers/DisplayController.dart';
 import 'package:voitureRoyale/views/widgets/mybutton.dart';
@@ -38,7 +39,7 @@ class _MyWidgetState extends State<MyWidget> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background82.jpg"),
+            image: AssetImage("assets/images/background84.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -145,16 +146,28 @@ class _MyWidgetState extends State<MyWidget> {
 
                           try {
                             print(
-                                "http://localhost/car_sales/login.php?username=$username&password=$password&email=$email");
+                                "https://2204-41-89-16-2.ngrok-free.app/car_sales/login.php?username=$username&password=$password&email=$email");
                             // Set the URL for your login endpoint (change localhost to actual server when deployed)
                             var url = Uri.parse(
-                                "http://localhost/car_sales/login.php?username=$username&password=$password&email=$email");
+                                    "http://localhost/car_sales/login.php")
+                                .replace(queryParameters: {
+                              'username': username,
+                              'password':
+                                  password, // Note: Sending password via GET is insecure! Consider POST.
+                              'email': email,
+                            });
 
                             // Send the HTTP request to the server
-                            var response = await http
-                                .get(url, headers: <String, String>{
-                              "Content-type": "application/json; charset=UTF-8"
-                            });
+                            var response = await http.get(
+                              url,
+                              headers: {
+                                // Standard header for JSON GET requests
+                                "Accept": "application/json",
+                                // *** THIS IS THE IMPORTANT HEADER FOR NGROK ***
+                                'ngrok-skip-browser-warning':
+                                    'true', // Value can be anything non-empty
+                              },
+                            ).timeout(Duration(seconds: 20));
                             print("Server response: ${response.body}");
 
                             if (response.statusCode == 200) {

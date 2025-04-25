@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:voitureRoyale/configs/config.dart';
 import 'package:voitureRoyale/configs/mycolors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -16,6 +17,11 @@ class _ProfileState extends State<Profile> {
   Map<String, dynamic>? userData;
   bool isLoading = true;
   bool hasError = false;
+
+  final Map<String, String> _headers = {
+    'Accept': 'application/json',
+    'ngrok-skip-browser-warning': 'true',
+  };
 
   @override
   void initState() {
@@ -141,18 +147,6 @@ class _ProfileState extends State<Profile> {
                             ),
                             const SizedBox(height: 24),
                             _buildSectionTitle('Settings'),
-                            _buildProfileCard(
-                              [
-                                _buildSettingsItem(
-                                  'Notification Settings',
-                                  Icons.notifications_outlined,
-                                  () {
-                                    // Handle notification settings
-                                  },
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
                             _buildSectionTitle('Account Actions'),
                             _buildProfileCard(
                               [

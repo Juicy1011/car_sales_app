@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:voitureRoyale/configs/config.dart';
 // Import API URLs
 
 class OrdersController extends GetxController {
@@ -10,6 +11,12 @@ class OrdersController extends GetxController {
   // Add loading and error states
   final RxBool isLoading = true.obs; // Start as loading initially
   final RxString errorMessage = ''.obs;
+
+  final Map<String, String> _headers = {
+    'Accept': 'application/json',
+    'ngrok-skip-browser-warning': 'true',
+    // Add 'Content-Type' ONLY for POST/PUT requests with a body
+  };
 
   @override
   void onInit() {

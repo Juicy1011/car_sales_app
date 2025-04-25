@@ -36,20 +36,29 @@ class Dashboard extends StatelessWidget {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [
-                        _buildFeaturedCarCard(
-                          "Rolls Royce Phantom",
-                          "assets/images/car1.jpeg",
-                          "\$455,000",
+                        GestureDetector(
+                          onTap: () => Get.toNamed("/products"),
+                          child: _buildFeaturedCarCard(
+                            "Rolls Royce Phantom",
+                            "assets/images/car1.jpeg",
+                            "\$455,000",
+                          ),
                         ),
-                        _buildFeaturedCarCard(
-                          "Bentley Continental GT",
-                          "assets/images/car2.jpeg",
-                          "\$225,000",
+                        GestureDetector(
+                          onTap: () => Get.toNamed("/products"),
+                          child: _buildFeaturedCarCard(
+                            "Bentley Continental GT",
+                            "assets/images/car2.jpeg",
+                            "\$225,000",
+                          ),
                         ),
-                        _buildFeaturedCarCard(
-                          "Lamborghini Huracan",
-                          "assets/images/car3.jpg",
-                          "\$325,000",
+                        GestureDetector(
+                          onTap: () => Get.toNamed("/products"),
+                          child: _buildFeaturedCarCard(
+                            "Lamborghini Huracan",
+                            "assets/images/car3.jpg",
+                            "\$325,000",
+                          ),
                         ),
                       ],
                     ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:voitureRoyale/configs/config.dart';
 import 'dart:convert';
 
 import 'package:voitureRoyale/configs/mycolors.dart';
@@ -67,7 +68,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background82.jpg"),
+            image: AssetImage("assets/images/background84.jpg"),
             fit: BoxFit.cover,
           ),
         ),

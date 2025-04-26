@@ -39,7 +39,7 @@ class _MyWidgetState extends State<MyWidget> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background84.jpg"),
+            image: AssetImage("assets/images/background84_copy.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -149,7 +149,7 @@ class _MyWidgetState extends State<MyWidget> {
                                 "https://2204-41-89-16-2.ngrok-free.app/car_sales/login.php?username=$username&password=$password&email=$email");
                             // Set the URL for your login endpoint (change localhost to actual server when deployed)
                             var url = Uri.parse(
-                                    "http://localhost/car_sales/login.php")
+                                    "http://192.168.100.220/car_sales/login.php")
                                 .replace(queryParameters: {
                               'username': username,
                               'password':

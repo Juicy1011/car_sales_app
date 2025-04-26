@@ -43,7 +43,7 @@ class _ProfileState extends State<Profile> {
     }
 
     print("Fetching profile for user_id: $userId");
-    final url = 'http://localhost/car_sales/profile.php?user_id=$userId';
+    final url = 'http://192.168.100.220/car_sales/profile.php?user_id=$userId';
 
     try {
       final response = await http.get(Uri.parse(url));

@@ -76,7 +76,7 @@ class CartController extends GetxController {
     for (var item in cartItems) {
       try {
         final url = Uri.parse(
-            'http://localhost/car_sales/create_order.php'); // Use localhost only if running emulator configured for it, otherwise use your PC's IP
+            'http://192.168.100.220/car_sales/create_order.php'); // Use localhost only if running emulator configured for it, otherwise use your PC's IP
 
         // --- Prepare the body data as a Map<String, String> ---
         Map<String, String> bodyData = {

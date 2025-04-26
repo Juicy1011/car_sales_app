@@ -6,6 +6,7 @@ import 'package:voitureRoyale/controllers/orders_controller.dart';
 import 'package:voitureRoyale/utils/routes.dart';
 import 'package:voitureRoyale/controllers/cart_controller.dart';
 import 'views/screens/MyLoginPage.dart';
+import 'views/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,9 +17,9 @@ void main() async {
 
   runApp(GetMaterialApp(
     title: 'Voiture Royale',
-    home: MyWidget(),
+    //home: SplashScreen(),
     getPages: routes,
-    initialRoute: "/",
+    initialRoute: "/splash",
     debugShowCheckedModeBanner: false,
   ));
 }

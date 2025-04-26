@@ -32,7 +32,7 @@ class OrdersController extends GetxController {
       // TODO: Add user filtering if needed (pass user_id as query parameter)
       // final url = Uri.parse("${ApiUrls.getOrders}?user_id=YOUR_USER_ID");
       final url = Uri.parse(
-          'http://localhost/car_sales/get_orders.php'); // Fetch all for now
+          'http://192.168.100.220/car_sales/get_orders.php'); // Fetch all for now
 
       final response = await http.get(url);
 
@@ -57,7 +57,8 @@ class OrdersController extends GetxController {
   Future<bool> deleteOrder(String orderId) async {
     try {
       // Show some loading indicator specific to deletion if needed
-      final url = Uri.parse('http://localhost/car_sales/delete_orders.php');
+      final url =
+          Uri.parse('http://192.168.100.220/car_sales/delete_orders.php');
       final response = await http.post(
         url,
         body: {'order_id': orderId}, // Send order_id in the body

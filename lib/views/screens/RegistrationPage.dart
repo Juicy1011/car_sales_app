@@ -25,7 +25,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   bool _isConfirmPasswordVisible = false;
 
   Future<void> registerUser() async {
-    var url = Uri.parse("http://localhost/car_sales/register.php");
+    var url = Uri.parse("http://192.168.100.220/car_sales/register.php");
 
     try {
       var response = await http.post(url, body: {
@@ -68,7 +68,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/background84.jpg"),
+            image: AssetImage("assets/images/background84_copy.jpg"),
             fit: BoxFit.cover,
           ),
         ),
